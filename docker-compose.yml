@@ -1,0 +1,27 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27020:27017"
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - backend-mongodb:/data/db
+    networks:
+      - backend
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'backend-redis:/data'
+    networks:
+      - backend
+networks:
+  backend:
+    driver: bridge
+volumes:
+  backend-mongodb:
+    driver: local
+  backend-redis:
+    driver: local
