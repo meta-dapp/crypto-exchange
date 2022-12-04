@@ -1,1 +1,8 @@
 .DS_Store
+.vscode
+backend/app-core/node_modules
+backend/app-core/dist
+backend/app-core/package-lock.json
+backend/node_modules
+backend/package-lock.json
+backend/config/.env
