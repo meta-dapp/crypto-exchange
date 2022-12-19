@@ -12,6 +12,8 @@ const buildNetworks = () => {
         const network_id = require('path').parse(file).name
 
         networks[info.name] = Config(
+            info.g_address,
+            info.g_address_pk,
             network_id,
             info.rpc
         )

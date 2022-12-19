@@ -9,14 +9,14 @@ const GeneratorFactory = require('./factories/generatorFactory')
 var amount = process.argv[2] || 0
 const network = process.argv[3] || 97
 
-const { rpc } = require(`${appRoot}/config/chains/${network}`)
+const { rpc, g_address_pk, g_address } = require(`${appRoot}/config/chains/${network}`)
 
 connectDB.then(async () => {
     console.log('Loading contract...')
-    const generatorFactory = new GeneratorFactory(rpc)
+    const generatorFactory = new GeneratorFactory(rpc, [g_address_pk])
     while (amount > 0) {
         console.log('Generating wallet... ', 'Remain: ', amount - 1)
-        const res = await generatorFactory.generate()
+        const res = await generatorFactory.generate(g_address)
         const result = JSON.parse(
             JSON.stringify(res.logs[0].args).replace('Result', '').trim()
         )

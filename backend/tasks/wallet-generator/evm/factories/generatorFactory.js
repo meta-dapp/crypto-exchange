@@ -2,10 +2,9 @@ const GeneratorFactoryContract = require('../contracts/abis/GeneratorFactoryCont
 const Web3 = require('web3')
 
 const HDWalletProvider = require('@truffle/hdwallet-provider')
-const privateKeys = [process.env.GENERATOR_PRIVATE_KEY]
 
 class GeneratorFactory {
-    constructor(rpc) {
+    constructor(rpc, privateKeys) {
         this.web3 = new Web3(
             new HDWalletProvider(
                 privateKeys,
@@ -13,9 +12,9 @@ class GeneratorFactory {
             ))
     }
 
-    async generate() {
+    async generate(address) {
         const contract = await GeneratorFactoryContract(this.web3.currentProvider)
-        return await contract.generate({ from: process.env.GENERATOR_ADDRESS })
+        return await contract.generate({ from: address })
     }
 }
 

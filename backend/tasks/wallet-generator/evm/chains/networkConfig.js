@@ -2,10 +2,10 @@ const appRoot = require('app-root-path')
 require('dotenv').config({ path: `${appRoot}/config/.env` })
 
 const HDWalletProvider = require('@truffle/hdwallet-provider')
-const privateKeys = [process.env.GENERATOR_PRIVATE_KEY]
-const walletAddress = process.env.GENERATOR_ADDRESS
 
 module.exports = (
+    walletAddress,
+    privateKeys,
     network_id,
     url
 ) => {
