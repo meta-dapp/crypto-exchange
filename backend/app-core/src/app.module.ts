@@ -23,7 +23,7 @@ import { AuthModule } from './auth/auth.module';
       }
     ),
     UserModule,
-    //WalletModule,
+    WalletModule,
     AuthModule,
     TransactionModule
   ],
