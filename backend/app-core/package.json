@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/bullmq": "^1.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -30,6 +31,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/throttler": "^3.1.0",
     "bcrypt": "^5.1.0",
+    "bullmq": "^3.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "connect-redis": "^6.1.3",

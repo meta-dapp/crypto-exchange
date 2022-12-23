@@ -6,6 +6,10 @@ import { User, UserDocument } from '../user/schemas/user.schema';
 import { Model, Types } from 'mongoose';
 import { Wallet, WalletDocument } from './schemas/wallet.schema';
 import { WalletContract, WalletContractDocument } from './schemas/wallet-contract.schema';
+import { WithdrawDto } from './dto/withdraw.dto';
+import { InjectQueue } from '@nestjs/bullmq';
+import { default as QueueType } from './queue/types.queue'
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class WalletService {
@@ -14,9 +18,78 @@ export class WalletService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Wallet.name) private walletModel: Model<WalletDocument>,
     @InjectModel(WalletContract.name) private walletContractModel: Model<WalletContractDocument>,
+    @InjectQueue(QueueType.WITHDRAW_REQUEST) private withdrawQueue: Queue
   ) { }
-  async create(createWalletDto: CreateWalletDto) {
 
+  async create(createWalletDto: CreateWalletDto) {
+    let data = await this.userModel.aggregate([
+      { $match: { email: createWalletDto.email } },
+      { $unwind: '$wallets' },
+      { $project: { _id: 0 } },
+      {
+        $lookup: {
+          from: 'wallets',
+          localField: 'wallets',
+          foreignField: '_id',
+          as: 'walletsData',
+          pipeline: [
+            {
+              $match: {
+                coin: createWalletDto.coin,
+                chainId: createWalletDto.chainId
+              }
+            }
+          ]
+        }
+      }
+    ]).exec();
+
+    let exists = true;
+    if (!data || data.length === 0)
+      exists = false;
+
+    let wallet = exists ? data.find(w => w.walletsData.length > 0) : undefined;
+    if (wallet) {
+      wallet = wallet.walletsData[0];
+      return {
+        address: wallet.address,
+        chainId: wallet.chainId,
+        coin: wallet.coin,
+        walletId: wallet._id
+      }
+    } else {
+      // no tiene wallet
+      const data = await this.walletContractModel.findOneAndUpdate(
+        { chainId: createWalletDto.chainId, reserved: false },
+        { reserved: true }
+      );
+
+      if (data) {
+        const wallet = new this.walletModel({
+          address: data.address,
+          chainId: createWalletDto.chainId,
+          coin: createWalletDto.coin
+        });
+
+        const saved = await wallet.save();
+        if (saved) {
+          const result = await this.userModel.updateOne({
+            email: createWalletDto.email
+          }, {
+            $push: { wallets: wallet }
+          });
+
+          if (result) {
+            return {
+              address: wallet.address,
+              chainId: wallet.chainId,
+              coin: wallet.coin,
+              walletId: wallet._id
+            }
+          }
+        }
+      }
+    }
   }
 
   async getWallet(email: string, queryDto: QueryDto) {
@@ -45,7 +118,7 @@ export class WalletService {
         wallet = wallet.walletsData[0];
         const data = await this.walletModel.findOne(
           { _id: new Types.ObjectId(wallet._id) },
-          { _id: 0, trasactions: 0, __v: 0 }
+          { _id: 0, transactions: 0, __v: 0 }
         ).exec();
 
         if (data) {
@@ -53,5 +126,48 @@ export class WalletService {
         }
       }
     }
+  }
+
+  async getWallets(email: string) {
+    const data = await this.userModel.aggregate([
+      { $match: { email } },
+      { $unwind: '$wallets' },
+      { $project: { _id: 0, wallets: 1 } },
+      {
+        $lookup: {
+          from: "wallets",
+          localField: "wallets",
+          foreignField: "_id",
+          "pipeline": [
+            { "$project": { transactions: 0 } }
+          ],
+          as: "walletsData"
+        }
+      }
+    ]).exec();
+
+
+    if (data && data.length > 0) {
+      return data.map(wallet => {
+        return {
+          balance: wallet.walletsData[0].balance,
+          address: wallet.walletsData[0].address,
+          coin: wallet.walletsData[0].coin,
+          chainId: wallet.walletsData[0].chainId,
+          walletId: wallet.walletsData[0]._id
+        }
+      })
+    }
+  }
+
+  async withdraw(withdrawDto: WithdrawDto) {
+    const withdrawRequest = await this.withdrawQueue.add('request', {
+      transactionId: 'test_id:transaction',
+      walletId: 'test_id:wallet',
+      amount: withdrawDto.amount,
+      withdrawAddress: withdrawDto.to,
+    });
+
+    return withdrawRequest.asJSON();
   }
 }

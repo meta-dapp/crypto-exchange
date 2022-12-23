@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { AuthModule } from './auth/auth.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -22,6 +23,12 @@ import { AuthModule } from './auth/auth.module';
         useUnifiedTopology: true
       }
     ),
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT)
+      }
+    }),
     UserModule,
     WalletModule,
     AuthModule,

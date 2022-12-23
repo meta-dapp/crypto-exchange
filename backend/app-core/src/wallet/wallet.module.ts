@@ -9,6 +9,8 @@ import { User, UserSchema } from '../user/schemas/user.schema';
 import { WalletContract, WalletContractSchema } from './schemas/wallet-contract.schema';
 import { HashService } from '../user/hash.service';
 import { AuthService } from '../auth/auth.service';
+import { BullModule } from '@nestjs/bullmq';
+import { default as QueueType } from './queue/types.queue'
 
 @Module({
   imports: [
@@ -17,7 +19,10 @@ import { AuthService } from '../auth/auth.service';
       { name: Wallet.name, schema: WalletSchema },
       { name: User.name, schema: UserSchema },
       { name: WalletContract.name, schema: WalletContractSchema }
-    ])
+    ]),
+    BullModule.registerQueue({
+      name: QueueType.WITHDRAW_REQUEST
+    })
   ],
   controllers: [WalletController],
   providers: [
