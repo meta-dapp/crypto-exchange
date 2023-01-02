@@ -1,7 +1,7 @@
 const appRoot = require('app-root-path')
 const Transaction = require(`${appRoot}/config/models/Transaction`)
 const Wallet = require(`${appRoot}/config/models/Wallet`)
-//const { Queue } = require('bullmq')
+const { Queue } = require('bullmq')
 const { v4: uuidv4 } = require('uuid')
 
 const createTransaction
@@ -23,6 +23,24 @@ const createTransaction
                     transactions: transaction
                 }
             })
+
+            if (result) {
+                const depositsQueue = new Queue(`${coin.toLowerCase()}-deposits`)
+                depositsQueue.add('deposit', {
+                    walletAddress,
+                    transactionHash,
+                    chainId,
+                    coin,
+                    transactionId: transaction._id.toString(),
+                    uuid: uuidv4()
+                }, {
+                    attempts: 20,
+                    backoff: {
+                        type: 'exponential',
+                        delay: 5000,
+                    }
+                })
+            }
 
             return 'deposit'
         }
