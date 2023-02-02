@@ -1,0 +1,52 @@
+{
+    "apps": [
+        {
+            "name": "AVAX Broadcast NODE",
+            "script": "./daemon/subscriptions/chain/evm/native-coins/avax.js"
+        },
+        {
+            "name": "BNB Broadcast NODE",
+            "script": "./daemon/subscriptions/chain/evm/native-coins/bnb.js"
+        },
+        {
+            "name": "ETH Broadcast NODE",
+            "script": "./daemon/subscriptions/chain/evm/native-coins/eth.js"
+        },
+        {
+            "name": "FTM Broadcast NODE",
+            "script": "./daemon/subscriptions/chain/evm/native-coins/ftm.js"
+        },
+        {
+            "name": "MATIC Broadcast NODE",
+            "script": "./daemon/subscriptions/chain/evm/native-coins/matic.js"
+        },
+        {
+            "name": "App Withdraw Broadcast NODE",
+            "script": "./daemon/subscriptions/app/withdraws.js"
+        },
+        {
+            "name": "Avalanche Worker NODE",
+            "script": "./daemon/workers/chain/avalanche.js"
+        },
+        {
+            "name": "BSC Worker NODE",
+            "script": "./daemon/workers/chain/bsc.js"
+        },
+        {
+            "name": "Ethereum Worker NODE",
+            "script": "./daemon/workers/chain/ethereum.js"
+        },
+        {
+            "name": "Fantom Worker NODE",
+            "script": "./daemon/workers/chain/fantom.js"
+        },
+        {
+            "name": "Polygon Worker NODE",
+            "script": "./daemon/workers/chain/polygon.js"
+        },
+        {
+            "name": "App Withdraw Worker NODE",
+            "script": "./daemon/workers/local/withdrawRequests.js"
+        }
+    ]
+}
