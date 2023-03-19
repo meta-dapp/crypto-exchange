@@ -1,51 +1,51 @@
 {
     "apps": [
         {
-            "name": "AVAX Broadcast NODE",
+            "name": "ME: AVAX Broadcast NODE",
             "script": "./daemon/subscriptions/chain/evm/native-coins/avax.js"
         },
         {
-            "name": "BNB Broadcast NODE",
+            "name": "ME: BNB Broadcast NODE",
             "script": "./daemon/subscriptions/chain/evm/native-coins/bnb.js"
         },
         {
-            "name": "ETH Broadcast NODE",
+            "name": "ME: ETH Broadcast NODE",
             "script": "./daemon/subscriptions/chain/evm/native-coins/eth.js"
         },
         {
-            "name": "FTM Broadcast NODE",
+            "name": "ME: FTM Broadcast NODE",
             "script": "./daemon/subscriptions/chain/evm/native-coins/ftm.js"
         },
         {
-            "name": "MATIC Broadcast NODE",
+            "name": "ME: MATIC Broadcast NODE",
             "script": "./daemon/subscriptions/chain/evm/native-coins/matic.js"
         },
         {
-            "name": "App Withdraw Broadcast NODE",
+            "name": "ME: App Withdraw Broadcast NODE",
             "script": "./daemon/subscriptions/app/withdraws.js"
         },
         {
-            "name": "Avalanche Worker NODE",
+            "name": "ME: Avalanche Worker NODE",
             "script": "./daemon/workers/chain/avalanche.js"
         },
         {
-            "name": "BSC Worker NODE",
+            "name": "ME: BSC Worker NODE",
             "script": "./daemon/workers/chain/bsc.js"
         },
         {
-            "name": "Ethereum Worker NODE",
+            "name": "ME: Ethereum Worker NODE",
             "script": "./daemon/workers/chain/ethereum.js"
         },
         {
-            "name": "Fantom Worker NODE",
+            "name": "ME: Fantom Worker NODE",
             "script": "./daemon/workers/chain/fantom.js"
         },
         {
-            "name": "Polygon Worker NODE",
+            "name": "ME: Polygon Worker NODE",
             "script": "./daemon/workers/chain/polygon.js"
         },
         {
-            "name": "App Withdraw Worker NODE",
+            "name": "ME: App Withdraw Worker NODE",
             "script": "./daemon/workers/local/withdrawRequests.js"
         }
     ]

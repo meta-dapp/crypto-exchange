@@ -1,9 +1,9 @@
-const nodemailer =  require('nodemailer')
+const nodemailer = require('nodemailer')
 let mailTransporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'metadappexchange@gmail.com',
-        pass: 'zsmiduxzontjcdyd'
+        pass: 'ewdtxjmowybhjqim'
     }
 })
 
