@@ -20,6 +20,7 @@ export class Transaction {
     @Prop()
     amount: number;
 
+    @Prop()
     to: string;
 
     @Prop({
